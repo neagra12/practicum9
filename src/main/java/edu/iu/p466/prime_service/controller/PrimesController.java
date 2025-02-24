@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 @CrossOrigin
 @RequestMapping("/primes")
 
+
 public class PrimesController {
 
    IPrimeService primesService;
