@@ -5,3 +5,5 @@ WORKDIR /home
 COPY ./target/prime-service-0.0.1-SNAPSHOT.jar primes-service.jar
 
 ENTRYPOINT ["java", "-jar", "primes-service.jar"]
+COPY ./target/prime-service-0.0.1-SNAPSHOT.jar prime-service.jar
+ENTRYPOINT ["java","-jar","primes-service.jar"]
