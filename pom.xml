@@ -8,7 +8,7 @@
 		<version>3.4.2</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
-	<groupId>edu.iu.p466</groupId>
+	<groupId>edu.iu.p566</groupId>
 	<artifactId>prime-service</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>prime-service</name>
