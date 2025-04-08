@@ -2,19 +2,19 @@ package edu.iu.p566.prime_service.controller;
 
 
 import edu.iu.p566.prime_service.model.Customer;
-import edu.iu.p566.prime_service.service.AuthenticationService;
 import edu.iu.p566.prime_service.service.IAuthenticationService;
 import edu.iu.p566.prime_service.service.TokenService;
-import org.springframework.boot.autoconfigure.neo4j.Neo4jProperties;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.io.IOException;
 
+@CrossOrigin
 @RestController
 public class AuthenticationController {
     private final IAuthenticationService authenticationService;
@@ -28,7 +28,7 @@ public class AuthenticationController {
     }
 
     @PostMapping("/register")
-    public boolean register(@RequestBody Customer customer){
+    public Customer register(@RequestBody Customer customer){
         try {
             return authenticationService.register(customer);
         } catch (IOException e) {

@@ -4,7 +4,9 @@ import edu.iu.p566.prime_service.service.IPrimeService;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
+
 @CrossOrigin
+
 @RequestMapping("/primes")
 
 public class PrimesController {
