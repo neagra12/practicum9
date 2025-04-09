@@ -1,0 +1,83 @@
+name: Build, Test, and Deploy Prime Service
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  build_and_deploy:
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres
+        env:
+          POSTGRES_USER: admin2024
+          POSTGRES_PASSWORD: p4662024!
+          POSTGRES_DB: primes
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    env:
+      VERSION: ${{ secrets.SERVICE_VERSION }}
+      REGISTRY_URL: ${{ secrets.REGISTRY_URL }}
+      REGISTRY_USERNAME: ${{ secrets.REGISTRY_USERNAME }}
+      REGISTRY_PASSWORD: ${{ secrets.REGISTRY_PASSWORD }}
+      ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
+      SPRING_DATASOURCE_URL: ${{ secrets.SPRING_DATASOURCE_URL }}
+      SPRING_DATASOURCE_USERNAME: ${{ secrets.SPRING_DATASOURCE_UN }}
+      SPRING_DATASOURCE_PASSWORD: ${{ secrets.SPRING_DATASOURCE_PW }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Java 17
+        uses: actions/setup-java@v3
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+
+      - name: Give execute permission to mvnw
+        run: chmod +x ./mvnw
+
+      - name: Build with Maven
+        run: ./mvnw clean package -DskipTests
+
+      - name: Run tests
+        run: ./mvnw test
+        env:
+          SPRING_DATASOURCE_URL: jdbc:postgresql://localhost:5432/primes
+          SPRING_DATASOURCE_USERNAME: admin2024
+          SPRING_DATASOURCE_PASSWORD: p4662024!
+
+      - name: Test report
+        uses: dorny/test-reporter@v1
+        if: always()
+        with:
+          name: Maven Test Results
+          path: target/surefire-reports/*.xml
+          reporter: java-junit
+
+      - name: Build Docker image
+        run: ./scripts/build-image.sh
+
+      - name: Push to GitHub Container Registry
+        run: ./scripts/push-to-ghcr.sh
+
+      - name: Push to Azure Container Registry
+        run: ./scripts/push-to-acr.sh
+
+      - name: Set up kubectl
+        uses: tale/kubectl-action@v1
+        with:
+          base64-kube-config: ${{ secrets.KUBE_CONFIG }}
+
+      - name: Deploy to AKS
+        run: ./scripts/deploy.sh
