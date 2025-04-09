@@ -70,6 +70,10 @@ jobs:
           path: target/surefire-reports/*.xml
           reporter: java-junit
 
+      # 🧱 Add script permissions here
+      - name: Make all scripts executable
+        run: chmod +x ./scripts/*.sh
+
       - name: Build Docker image
         run: ./scripts/build-image.sh
 
