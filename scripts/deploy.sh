@@ -1,12 +1,12 @@
 #!/bin/bash
-set -u  # or set -o nounset
+set -u  # fail on unset variables
 
-# Verify required environment variables are set
+# Match the names from GitHub Actions env:
 : "$REGISTRY_URL"
 : "$VERSION"
-: "$DATASOURCE_URL"
-: "$DATASOURCE_USERNAME"
-: "$DATASOURCE_PASSWORD"
+: "$SPRING_DATASOURCE_URL"
+: "$SPRING_DATASOURCE_USERNAME"
+: "$SPRING_DATASOURCE_PASSWORD"
 
-# Perform environment variable substitution and apply the manifest
+# Run deployment by substituting env vars in the manifest
 envsubst < ./scripts/kubernetes/deploy.yaml | kubectl apply -f -
