@@ -1,12 +1,16 @@
 #!/bin/bash
-set -u  # fail on unset variables
+set -eu  # fail on unset variables and any error
 
-# Match the names from GitHub Actions env:
-: "$REGISTRY_URL"
-: "$VERSION"
-: "$SPRING_DATASOURCE_URL"
-: "$SPRING_DATASOURCE_USERNAME"
-: "$SPRING_DATASOURCE_PASSWORD"
+# Match the variables actually used in the deploy.yaml
+: "${REGISTRY_URL:?Missing REGISTRY_URL}"
+: "${VERSION:?Missing VERSION}"
+: "${DATASOURCE_URL:?Missing DATASOURCE_URL}"
+: "${DATASOURCE_UN:?Missing DATASOURCE_UN}"
+: "${DATASOURCE_PW:?Missing DATASOURCE_PW}"
 
-# Run deployment by substituting env vars in the manifest
+echo "Deploying prime-service..."
+echo "Using image: $REGISTRY_URL/prime-service:$VERSION"
+echo "Using database: $DATASOURCE_URL"
+
+# Substitute variables and apply manifest
 envsubst < ./scripts/kubernetes/deploy.yaml | kubectl apply -f - --validate=false
