@@ -19,6 +19,8 @@ spec:
           envFrom:
             - secretRef:
                 name: postgres-primes-secrets
+          ports:
+            - containerPort: 8085
           resources:
             requests:
               memory: "256Mi"
@@ -27,9 +29,8 @@ spec:
               memory: "512Mi"
               cpu: "500m"
 
-
-
 ---
+
 apiVersion: v1
 kind: Service
 metadata:
@@ -42,13 +43,15 @@ spec:
     - protocol: TCP
       port: 80
       targetPort: 8085
+
 ---
+
 apiVersion: v1
 kind: Secret
 metadata:
   name: postgres-primes-secrets
-
+type: Opaque
 stringData:
-  DATASOURCE_PASSWORD: $DATASOURCE_PW
-  DATASOURCE_USERNAME: $DATASOURCE_UN
-  DATASOURCE_URL: $DATASOURCE_URL
+  SPRING_DATASOURCE_URL: $DATASOURCE_URL
+  SPRING_DATASOURCE_USERNAME: $DATASOURCE_UN
+  SPRING_DATASOURCE_PASSWORD: $DATASOURCE_PW

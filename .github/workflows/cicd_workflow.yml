@@ -35,9 +35,16 @@ jobs:
       REGISTRY_USERNAME: ${{ secrets.REGISTRY_USERNAME }}
       REGISTRY_PASSWORD: ${{ secrets.REGISTRY_PASSWORD }}
       ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
+
       SPRING_DATASOURCE_URL: ${{ secrets.SPRING_DATASOURCE_URL }}
       SPRING_DATASOURCE_USERNAME: ${{ secrets.SPRING_DATASOURCE_UN }}
       SPRING_DATASOURCE_PASSWORD: ${{ secrets.SPRING_DATASOURCE_PW }}
+
+      # 👇 These are required by deploy.sh and deploy.yaml
+      DATASOURCE_URL: ${{ secrets.SPRING_DATASOURCE_URL }}
+      DATASOURCE_UN: ${{ secrets.SPRING_DATASOURCE_UN }}
+      DATASOURCE_PW: ${{ secrets.SPRING_DATASOURCE_PW }}
+
 
     steps:
       - name: Checkout code
