@@ -9,4 +9,4 @@ set -u  # fail on unset variables
 : "$SPRING_DATASOURCE_PASSWORD"
 
 # Run deployment by substituting env vars in the manifest
-envsubst < ./scripts/kubernetes/deploy.yaml | kubectl apply -f -
+envsubst < ./scripts/kubernetes/deploy.yaml | kubectl apply -f - --validate=false
