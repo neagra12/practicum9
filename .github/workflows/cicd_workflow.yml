@@ -96,4 +96,5 @@ jobs:
           base64-kube-config: ${{ secrets.KUBE_CONFIG }}
 
       - name: Deploy to AKS
-        run: ./scripts/deploy.sh
+        run: ./scripts/deploy.sh  # this is the file
+
