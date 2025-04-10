@@ -1,12 +1,13 @@
-set -u
+#!/bin/bash
+set -e
 
-: "$VERSION"
-: "$REGISTRY_URL"
-: "$REGISTRY_USERNAME"
-: "$REGISTRY_PASSWORD"
+: "${VERSION:=v1.0.0}"
+: "${REGISTRY_URL:?Need to set REGISTRY_URL}"
+: "${REGISTRY_USERNAME:?Need to set REGISTRY_USERNAME}"
+: "${REGISTRY_PASSWORD:?Need to set REGISTRY_PASSWORD}"
 
-echo "${secrets.REGISTRY_PASSWORD}" | docker login "${secrets.REGISTRY_URL}" -u "${secrets.REGISTRY_USERNAME }" --password-stdin
-docker tag ghcr.io/neagra12/prime-service:v1.0.0 ${secrets.REGISTRY_URL}/prime-service:v1.0.0
-docker push ${secrets.REGISTRY_URL}/prime-service:v1.0.0
+echo "Logging into Azure Container Registry: $REGISTRY_URL"
+echo "$REGISTRY_PASSWORD" | docker login "$REGISTRY_URL" -u "$REGISTRY_USERNAME" --password-stdin
 
-
+echo "Pushing Docker image to ACR..."
+docker push "$REGISTRY_URL/prime-service:$VERSION"
